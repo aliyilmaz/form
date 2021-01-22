@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<base href="<?=$this->base_url;?>">
+	<script src="public/mind.js"></script>
+	<title>File(s) upload</title>
+	<link rel="shortcut icon" href="#">
+</head>
+<body>
+
+	<form id="example">
+		
+		<h4>File(s)</h4>
+		<input type="file" name="files[]" multiple>
+
+		<div id="status"></div>
+		<input type="button" id="btn_files_upload" value="Upload">
+	</form>
+
+	<script>
+		var button = document.querySelector("#btn_files_upload");
+		button.addEventListener('click', event => {
+			
+			// url, data, function
+			actionPost("api/form", formSerialize("#example"), function(response){
+
+				// element, data
+				appendItem("#status", response);
+				console.log(response);
+			});
+		});
+			
+	</script>
+</body>
+</html>
