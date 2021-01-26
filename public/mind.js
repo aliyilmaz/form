@@ -1,3 +1,13 @@
+/**
+ *
+ * @package    mind.js
+ * @version    Release: 1.0.0
+ * @license    GPL3
+ * @author     Ali YILMAZ <aliyilmaz.work@gmail.com>
+ * @category   Javascript Framework, Basic web development kit.
+ * @link       https://github.com/aliyilmaz/mind.js
+ *
+ */
 function formSerialize(element){
     var elements = document.querySelector(element);
     var formData = new FormData(elements);
