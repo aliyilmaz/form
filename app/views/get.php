@@ -2,7 +2,7 @@
 <html>
 <head>
 	<base href="<?=$this->base_url;?>">
-	<title>File upload</title>
+	<title>Get</title>
 	<link rel="shortcut icon" href="#">
 	<script src="public/mind.js"></script>
 </head>
