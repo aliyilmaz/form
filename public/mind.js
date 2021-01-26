@@ -24,6 +24,24 @@ function actionPost(url, data, callback) {
     
 } 
 
+function actionGet(url, callback) {
+
+    var xhttp = new XMLHttpRequest();
+
+    // Set GET method and ajax file path
+    xhttp.open("GET", url, true);
+
+    // call on request changes state
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if(callback) callback(this.responseText);
+        }
+    };
+
+    xhttp.send(null);
+    
+} 
+
 function appendItem(element, value){
     let elements = document.querySelectorAll(element);
     if(elements.length >= 1){

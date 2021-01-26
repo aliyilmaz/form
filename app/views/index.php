@@ -7,6 +7,9 @@
     <link rel="shortcut icon" href="#">
 </head>
 <body>
-    <a href="file">File upload</a> | <a href="files">Files upload</a> | <a href="multi">Multi</a>
+    <a href="file">File upload</a> | 
+    <a href="files">Files upload</a> | 
+    <a href="multi">Multi</a> | 
+    <a href="get">Get</a>
 </body>
 </html>
