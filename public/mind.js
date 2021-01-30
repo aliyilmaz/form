@@ -1,7 +1,7 @@
 /**
  *
  * @package    mind.js
- * @version    Release: 1.0.1
+ * @version    Release: 1.0.6
  * @license    GPL3
  * @author     Ali YILMAZ <aliyilmaz.work@gmail.com>
  * @category   Javascript Framework, Basic web development kit.
@@ -63,5 +63,126 @@ function appendItem(element, value){
                 element.value = value;
             }
         });
+    }
+}
+
+function clickItem(element, callback){
+    let buttons = document.querySelectorAll(element);
+    for(var i = 0; i<buttons.length; i++){
+        
+        buttons[i].addEventListener('click', (e) => {   
+            if(callback) callback(e.target);
+        });
+
+    };
+}
+
+function keyupItem(element, callback){
+    let elements = document.querySelectorAll(element);
+    for(var i = 0; i<elements.length; i++){
+        
+        elements[i].addEventListener('keyup', (e) => {   
+            if(callback) callback(e.target);
+        });
+
+    };
+}
+
+function hideItem(element, callback){
+    let elements = document.querySelectorAll(element);
+    for(var i = 0; i<elements.length; i++){
+        
+        if(elements[i] !== undefined){
+            elements[i].style.visibility = "hidden";
+            if(callback) callback(this);
+        }
+
+    };
+}
+
+function showItem(element, callback){
+    let elements = document.querySelectorAll(element);
+    for(var i = 0; i<elements.length; i++){
+      
+        if(elements[i] !== undefined){
+            elements[i].style.visibility = "visible";
+            if(callback) callback(this);
+        }
+        
+    };
+}
+
+function removeItem(element, callback){
+    let elements = document.querySelectorAll(element);
+    for(var i = 0; i<elements.length; i++){
+      
+        if(elements[i] !== undefined){
+            elements[i].remove();
+            if(callback) callback(this);
+        }
+    
+    };
+}
+
+function redirect(url, delay=0, element=''){
+
+    let wait = 0,
+        inter = null,
+        elements = [];
+
+    if(element != ''){
+        wait = 1000;
+        elements = document.querySelectorAll(element);
+    } 
+    
+    inter = setInterval(function () {
+        if(delay === 0){
+            clearInterval(inter);
+            location.replace(url);
+        } else {
+            
+            if(elements.length >= 1){
+
+                elements.forEach(function(element) {
+                    if(element.value === undefined){
+                        element.textContent = delay;
+                    } else {
+                        element.value = delay;
+                    }
+                });
+            }
+        }
+        delay--;
+    }, wait);
+    
+}
+
+function getLocation(element='', callback) {
+
+    let elements = [];
+    if(element != ''){
+        elements = document.querySelectorAll(element);
+    }
+    if (navigator.geolocation) {
+        
+        navigator.geolocation.getCurrentPosition(function(position){
+            
+            let coordinates = position.coords.latitude+','+position.coords.longitude;
+            
+            if(elements.length >= 1){
+        
+                elements.forEach(function(element) {
+                    if(element.value === undefined){
+                        element.textContent = coordinates;
+                    } else {
+                        element.value = coordinates;
+                    }
+                });
+            } 
+
+            if(callback) callback(position);
+        });
+    } else { 
+        console.log("Geolocation is not supported by this browser.");
     }
 }
