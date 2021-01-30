@@ -56,17 +56,15 @@
 	</form>
 	
 	<script>
-		var button = document.querySelector("#btn_multi");
-		button.addEventListener('click', event => {
-			
-			// url, data, function
-			actionPost("api/form", formSerialize("#example"), function(response){
+	clickItem('#btn_multi', function(){
+		// url, data, function
+		actionPost("api/form", formSerialize("#example"), function(response){
 
-				// element, data
-				appendItem("#status", response);
-				console.log(response);
-			});
+		// element, data
+		appendItem("#status", response);
+		console.log(response);
 		});
+	});
 			
 	</script>
 </body>

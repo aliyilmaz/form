@@ -18,9 +18,7 @@
 	</form>
 
 	<script>
-		var button = document.querySelector("#btn_files_upload");
-		button.addEventListener('click', event => {
-			
+		clickItem('#btn_files_upload', function(){
 			// url, data, function
 			actionPost("api/form", formSerialize("#example"), function(response){
 
@@ -28,8 +26,7 @@
 				appendItem("#status", response);
 				console.log(response);
 			});
-		});
-			
+		})
 	</script>
 </body>
 </html>

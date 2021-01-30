@@ -18,17 +18,17 @@
 	</form>
 	
 	<script>
-		var button = document.querySelector("#btn_file_upload");
-		button.addEventListener('click', event => {
-			
+
+		clickItem('#btn_file_upload', function(){
 			// url, data, function
 			actionPost("api/form", formSerialize("#example"), function(response){
 
-				// element, data
-				appendItem("#status", response);
-				console.log(response);
+			// element, data
+			appendItem("#status", response);
+			console.log(response);
 			});
 		});
+		
 			
 	</script>
 </body>
