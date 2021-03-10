@@ -3,7 +3,7 @@
 /**
  *
  * @package    Mind
- * @version    Release: 4.3.3
+ * @version    Release: 4.3.5
  * @license    GPL3
  * @author     Ali YILMAZ <aliyilmaz.work@gmail.com>
  * @category   Php Framework, Design pattern builder for PHP.
@@ -1177,24 +1177,24 @@ class Mind extends PDO
      */
     public function newId($tblName){
 
-        $sql = 'SHOW TABLE STATUS LIKE `'.$tblName.'`';
+        $IDs = [1];
+        $needle = $this->increments($tblName);
 
-        try{
-
-            $query = $this->query($sql, PDO::FETCH_ASSOC);
-
-            $result = 0;
-            foreach ( $query as $item ) {
-                $result = $item['Auto_increment'];
+        foreach ($this->getData($tblName, array('column'=>$needle)) as $row) {
+            if(!in_array($row[$needle], $IDs)){
+                $IDs[] = $row[$needle];
             }
+        }
 
-            if($result>1){
-                return $result;
-            } else {
-                return $result+1;
-            }
-        }catch (Exception $e){
-            return 0;
+        $length = max($IDs);
+
+        if($length>1){
+            return $length+1;
+        } else {
+            $scheme = $this->tableInterpriter($tblName);
+            $this->tableDelete($tblName);
+            $this->tableCreate($tblName, $scheme);
+            return $length;
         }
 
     }
@@ -1251,7 +1251,11 @@ class Mind extends PDO
                 switch ($row['Type']) {
                     case 'int':
                         if($row['Extra'] == 'auto_increment'){
-                            $row = $row['Field'].':increments:'.$row['Length'];
+                            if(isset($row['Length'])){
+                                $row = $row['Field'].':increments:'.$row['Length'];
+                            } else {
+                                $row = $row['Field'].':increments';
+                            }
                         } else {
                             $row = $row['Field'].':int:'.$row['Length'];
                         }
@@ -1647,40 +1651,76 @@ class Mind extends PDO
     }
 
     /**
+     * Encode size
+     * @param mixed $size
+     * @return int|bool
+     */
+    public function decodeSize($size)
+    {
+        $sizeLibrary = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+
+        if(strstr($size, ' ')){
+
+            if(count(explode(' ', $size)) === 2){
+                list($number, $format) = explode(' ', $size);
+                $id = array_search($format, $sizeLibrary);
+                return $number*pow(1024, $id);
+            } 
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Encode size
+     * @param mixed $size
+     * @return string|bool
+     */
+    public function encodeSize($size, $precision = 2)
+    {
+        $sizeLibrary = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+
+        if(isset($size['size'])){
+            $size = $size['size'];
+        }
+
+        if(!strstr($size, ' ')){
+            $exp = floor(log($size, 1024)) | 0;
+            $exp = min($exp, count($sizeLibrary) - 1);
+            return round($size / (pow(1024, $exp)), $precision).' '.$sizeLibrary[$exp];
+        }
+
+        return false;
+    }
+
+    /**
      * Size verification.
      *
-     * @param mixed $str
-     * @param string $size
+     * @param mixed $first_size
+     * @param string $second_size
      * @return bool
      * */
-    public function is_size($str, $size){
+    public function is_size($first_size, $second_size){
 
-        $byte = 1024;
-        $sizeLibrary = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
-
-        if( ctype_digit($str) AND !is_array($str) ){
-            $str = array("size"=>$str);
-        }
-
-        if(is_array($str) AND !empty($size) AND strstr($size, ' ')){
-
-            if(count(explode(' ', $size))!=2){
-                return false;
-            }
-
-            list($number, $format) = explode(' ', $size);
-
-            if(in_array($format, $sizeLibrary)){
-
-                $id = array_search($format, $sizeLibrary);
-                $calc = $number*pow($byte, $id);
-
-                if($str['size']<$calc){
-                    return true;
-                }
+        if(is_array($first_size)){
+            if(isset($first_size['size'])){
+                $first_size = $first_size['size'];
             }
         }
 
+        if(strstr($first_size, ' ')){
+            $first_size = $this->encodeSize($first_size);
+        }
+
+        if(strstr($second_size, ' ')){
+            $second_size = $this->encodeSize($second_size);
+        }
+
+        if($first_size >= $second_size){
+            return true;
+        }
+        
         return false;
     }
 
