@@ -21,7 +21,7 @@
 
 		clickItem('#btn_file_upload', function(){
 			// url, data, function
-			actionPost("api/form", formSerialize("#example"), function(response){
+			actionPost("api/form", "#example", function(response){
 
 			// element, data
 			appendItem("#status", response);
