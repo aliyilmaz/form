@@ -52,7 +52,7 @@
 		<textarea name="content"></textarea><br>
 		<div id="status"></div>
 		<input type="button" id="btn_multi" value="Send">
-
+		<?=$_SESSION['csrf']['input'];?>
 	</form>
 	
 	<script>

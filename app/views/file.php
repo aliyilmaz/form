@@ -11,7 +11,7 @@
 	<form id="example">
 		<h4>File</h4>
 		<input type="file" name="file""><br>
-
+		<?=$_SESSION['csrf']['input'];?>
 		<div id="status"></div>
 		<input type="button" id="btn_file_upload" value="Upload">
 

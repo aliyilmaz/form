@@ -12,7 +12,7 @@
 		
 		<h4>File(s)</h4>
 		<input type="file" name="files[]" multiple>
-
+		<?=$_SESSION['csrf']['input'];?>
 		<div id="status"></div>
 		<input type="button" id="btn_files_upload" value="Upload">
 	</form>
